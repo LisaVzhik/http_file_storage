@@ -30,3 +30,25 @@ python run.py
 не забудь заменить "example.txt" на путь к своему файлу
 ```bash
 curl -X POST -F "the_file=@example.txt" http://localhost:5000/upload
+```
+
+### Скачивание файла
+
+- **Method**: GET
+- **URL**: /download/<file_hash>
+- **URL Params**:
+  - **Required**:
+    - `file_hash=[string]`: хэш файла, который необходимо загрузить.
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: содержимое файла.
+- **Error Response**:
+  - **Code**: 404
+  - **Content**: {"message": "File not found"}
+- **Description**: позволяет любому пользователю загрузить файл, предоставив его хэш (аутентификация не требуется).
+
+#### Пример запроса с curl
+не забудь заменить <file_hash> на хэш файла, который ты хочешь загрузить:
+
+```bash
+curl -o filename_to_save_as.extension http://localhost:5000/download/<file_hash>
