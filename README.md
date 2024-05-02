@@ -25,11 +25,14 @@ python run.py
   - **Code**: 400 (Bad Request)
   - **Content**: No file provided
   - **Description**: Возвращается, если файл не был предоставлен.
+  - **Code**: 401 (Unauthorized)
+  - **Content**: Unauthorized Access
+  - **Description**: Возвращается, если файл пытается загрузить неавторизованный пользователь.
 
-#### Пример запросе с curl
-не забудь заменить "example.txt" на путь к своему файлу
+#### Пример запроса с curl
+не забудь заменить "example.txt" на путь к своему файлу, а также логин и пароль:
 ```bash
-curl -X POST -F "the_file=@example.txt" http://localhost:5000/upload
+curl -X POST -u username:password -F "the_file=@example.txt" http://localhost:5000/upload
 ```
 
 ### Скачивание файла

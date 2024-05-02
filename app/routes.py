@@ -2,6 +2,7 @@ import hashlib
 import os
 
 from flask import request, send_from_directory, abort, Response
+from werkzeug.exceptions import BadRequestKeyError
 
 from app import app
 from auth.auth import auth
@@ -12,19 +13,23 @@ from utils.metadata import add_file_metadata, load_metadata, delete_file_metadat
 @app.route('/upload', methods=['POST'])
 @auth.login_required
 def upload_file():
-    username = request.authorization.username
-    file = request.files['the_file']
-    if file and file.filename != "":
-        file_content = file.read()
-        file_hash = hashlib.sha256(file_content).hexdigest()
-        file_dir = os.path.join(app.config["FILE_STORAGE_PATH"], file_hash[:2])
-        file_path = os.path.join(file_dir, file_hash)
-        os.makedirs(file_dir, exist_ok=True)
-        add_file_metadata(file_hash, username, file_path)
-        with open(file_path, "wb") as f:
-            f.write(file_content)
-        logger.info(f"File uploaded successfully by {username}, hash: {file_hash}")
-        return file_hash
+    try:
+        username = request.authorization.username
+        file = request.files['the_file']
+        if file and file.filename != "":
+            file_content = file.read()
+            file_hash = hashlib.sha256(file_content).hexdigest()
+            file_dir = os.path.join(app.config["FILE_STORAGE_PATH"], file_hash[:2])
+            file_path = os.path.join(file_dir, file_hash)
+            os.makedirs(file_dir, exist_ok=True)
+            add_file_metadata(file_hash, username, file_path)
+            with open(file_path, "wb") as f:
+                f.write(file_content)
+            logger.info(f"File uploaded successfully by {username}, hash: {file_hash}")
+            return file_hash
+    except BadRequestKeyError:
+        logger.error(f"No file provided")
+        abort(400, description="No file provided")
 
 
 @app.route('/download/<file_hash>', methods=['GET'])

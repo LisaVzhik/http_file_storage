@@ -10,7 +10,7 @@ def setup_logger():
     log_filepath = path.join(log_dir, "http_file_storage.log")
     logger.add(log_filepath, rotation="20mb", level="INFO")
 
-    log_filepath = path.join(log_dir, "errors.log")
-    logger.add(log_filepath, rotation="20mb", level="ERROR")
+    error_log_filepath = path.join(log_dir, "errors.log")
+    logger.add(error_log_filepath, rotation="20mb", level="ERROR")
 
     logger.info("Logging startup")
