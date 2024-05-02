@@ -5,7 +5,7 @@ from flask import request, send_from_directory, abort, Response
 
 from app import app
 from auth.auth import auth
-from utils.metadata import add_file_metadata
+from utils.metadata import add_file_metadata, load_metadata, delete_file_metadata
 
 
 @app.route('/upload', methods=['POST'])
@@ -33,3 +33,16 @@ def download_file(file_hash: str) -> Response:
         return send_from_directory(directory=file_dir, path=file_hash, as_attachment=True)
     else:
         abort(404, description="File not found")
+
+
+@app.route('/delete/<file_hash>', methods=['DELETE'])
+@auth.login_required
+def delete_file(file_hash: str):
+    username = request.authorization.username
+    metadata = load_metadata()
+    if file_hash in metadata and metadata[file_hash]['owner'] == username:
+        os.remove(metadata[file_hash]['path'])
+        delete_file_metadata(file_hash)
+        return {"message": "File deleted successfully"}, 200
+    else:
+        abort(404, "File not found or access denied")
