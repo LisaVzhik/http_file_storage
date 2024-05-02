@@ -52,3 +52,24 @@ curl -X POST -F "the_file=@example.txt" http://localhost:5000/upload
 
 ```bash
 curl -o filename_to_save_as.extension http://localhost:5000/download/<file_hash>
+```
+
+### Удаление файла
+
+- **Method**: DELETE
+- **URL**: /delete/<file_hash>
+- **URL Params**:
+  - **Required**:
+    - `file_hash=[string]`: хэш файла, который необходимо удалить.
+- **Success Response**:
+  - **Code**: 200
+  - **Content**: {"message": "File deleted successfully"}
+- **Error Response**:
+  - **Code**: 404
+  - **Content**: {"message": "File not found or access denied"}
+- **Description**: Позволяет авторизованному пользователю удалить файл, предоставив его хэш. Пользователь должен быть владельцем файла, чтобы выполнить удаление.
+#### Пример запроса с curl
+Замените <file_hash> на хэш файла, который вы хотите удалить, и убедитесь, что вы предоставили корректные учетные данные для аутентификации.
+```bash
+curl -X DELETE -u username:password http://localhost:5000/delete/<file_hash>
+```
