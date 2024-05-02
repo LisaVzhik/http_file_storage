@@ -1,7 +1,17 @@
 # http_file_storage
 Сервис предоставляет HTTP API для загрузки, скачивания и удаления файлов.
 
-## Установка и запуск
+## Настройка проекта и запуск 
+### Настроить переменные окружения:
+1. Создать файл `.env`
+2. Добавить все необходимые значения в `.env`
+#### Пример файла `.env`:
+```text
+FILE_STORAGE_PATH="/path/to/store"
+USERNAME="username"
+PASSWORD="password"
+```
+   
 ### Установить зависимости:
 ```commandline
 pip install -r requirements.txt
