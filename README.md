@@ -76,3 +76,10 @@ curl -o filename_to_save_as.extension http://localhost:5000/download/<file_hash>
 ```bash
 curl -X DELETE -u username:password http://localhost:5000/delete/<file_hash>
 ```
+
+## Тестирование
+Тесты написаны с использованием библиотеки `pytest` и проверяют работу всех эндпоинтов.
+#### Запуск тестов
+```bash
+pytest
+```
